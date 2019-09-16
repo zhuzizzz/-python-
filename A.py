@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Sep 15 16:59:07 2019
-
-@author: Maddux
-"""
+#八数码问题的A*算法
 
 import time 
 
