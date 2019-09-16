@@ -70,9 +70,9 @@ def solvePuzzle_depth(srcLayout, destLayout):
 
 if __name__ == "__main__":
 	
-    ##srcLayout = input("请输入初始状态：如(283104765)") #测试数据输入格式
+    srcLayout = input("请输入初始状态：如(283104765)") #测试数据输入格式
     start = time.process_time()
-    srcLayout = "283104765"
+    #test srcLayout = "283104765"
     destLayout = "123804765"
     
     retCode, lst_steps, nodes_opened, nodes_new = solvePuzzle_depth(srcLayout, destLayout)
