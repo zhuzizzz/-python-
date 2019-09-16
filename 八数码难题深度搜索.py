@@ -19,16 +19,7 @@ def swap_chr(a, i, j):  #得到ij交换后的数组
 def solvePuzzle_depth(srcLayout, destLayout):
     #先进行判断srcLayout和destLayout逆序值是否同是奇数或偶数
     #这是判断起始状态是否能够到达目标状态，同奇同偶时才是可达
-
-    for i in range(1,9):
-        fist = 0
-        for j in range (0,i):
-            if srcLayout[j]>srcLayout[i] :
-                fist = fist + 1
-    if (fist%2)!=0:
-        return -1
-    
-    '''
+    src = dest = 0
     for i in range(1,9):
         fist=0
         for j in range(0,i):
@@ -44,15 +35,16 @@ def solvePuzzle_depth(srcLayout, destLayout):
         dest=dest+fist
     if (src%2)!=(dest%2):#一个奇数一个偶数，不可达
         return -1, None
-    '''
+    
 
-	#初始化字典
+	#初始化列表
     g_dict_layouts[srcLayout] = -1
     stack_layouts = []
     stack_layouts.append(srcLayout)#当前状态存入open列表
-
+    nodes_opened = nodes_new = 0
     while len(stack_layouts) > 0:
-        curLayout = stack_layouts.pop(0)#出栈 （pop（0）为广度搜索）
+        curLayout = stack_layouts.pop(0) #出栈 （pop（0）为广度搜索）
+        nodes_opened = nodes_opened+1
         if curLayout == destLayout:#判断当前状态是否为目标状态
             break
 
@@ -61,10 +53,11 @@ def solvePuzzle_depth(srcLayout, destLayout):
         lst_shifts = g_dict_shifts[ind_slide]#当前可进行交换的位置集合
         for nShift in lst_shifts:
             newLayout = swap_chr(curLayout, nShift, ind_slide)
-
             if g_dict_layouts.get(newLayout) == None:#判断交换后的状态是否已经查询过
                 g_dict_layouts[newLayout] = curLayout
                 stack_layouts.append(newLayout)#存入集合
+                nodes_new = nodes_new+1
+                
 
     lst_steps = []
     lst_steps.append(curLayout)
@@ -72,16 +65,17 @@ def solvePuzzle_depth(srcLayout, destLayout):
         curLayout = g_dict_layouts[curLayout]
         lst_steps.append(curLayout)
     lst_steps.reverse()
-    return 0, lst_steps
+    return 0, lst_steps,nodes_opened,nodes_new
 
 
 if __name__ == "__main__":
 	
-    srcLayout = input("请输入初始状态：如(541203786)") #测试数据输入格式
+    ##srcLayout = input("请输入初始状态：如(283104765)") #测试数据输入格式
     start = time.process_time()
+    srcLayout = "283104765"
     destLayout = "123804765"
     
-    retCode, lst_steps = solvePuzzle_depth(srcLayout, destLayout)
+    retCode, lst_steps, nodes_opened, nodes_new = solvePuzzle_depth(srcLayout, destLayout)
     if retCode != 0:
         print("目标布局不可达")
     else:
@@ -92,3 +86,6 @@ if __name__ == "__main__":
             print(lst_steps[nIndex][6:])
     end = time.process_time()
     print("总用时:"+str(end-start))
+    print("扩展的节点数："+str(nodes_new))
+    print("搜索的节点数："+str(nodes_opened))
+  
